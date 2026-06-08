@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-31:12
+ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-32:12
+INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:2:1-32:12
 MERGED from [androidx.navigation:navigation-common:2.8.5] C:\Users\chandan\.gradle\caches\9.3.1\transforms\9b764308e07482ecfdd1b3240f01a2db\workspace\transformed\navigation-common-2.8.5\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-runtime:2.8.5] C:\Users\chandan\.gradle\caches\9.3.1\transforms\c5ce97886f5bbe6ecff42bc9a5a2a668\workspace\transformed\navigation-runtime-2.8.5\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.8.5] C:\Users\chandan\.gradle\caches\9.3.1\transforms\a75f168601352e9ef51b512875421ed8\workspace\transformed\navigation-common-ktx-2.8.5\AndroidManifest.xml:2:1-7:12
@@ -84,8 +84,8 @@ ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidMani
 	android:name
 		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:6:22-76
 application
-ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:8:5-29:19
-INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:8:5-29:19
+ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:8:5-30:19
+INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:8:5-30:19
 MERGED from [androidx.room:room-runtime-android:2.7.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\f8d91a46c8c5035686731672b1113f97\workspace\transformed\room-runtime-release\AndroidManifest.xml:23:5-29:19
 MERGED from [androidx.room:room-runtime-android:2.7.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\f8d91a46c8c5035686731672b1113f97\workspace\transformed\room-runtime-release\AndroidManifest.xml:23:5-29:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a06008ad01b725967fb36e2dc6f7adb\workspace\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
@@ -129,9 +129,11 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\chandan\.gradle\ca
 	android:name
 		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:9:9-41
 activity#com.locai.app.MainActivity
-ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:18:9-28:20
+ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:18:9-29:20
 	android:label
 		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:21:13-45
+	android:windowSoftInputMode
+		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:23:13-55
 	android:exported
 		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:20:13-36
 	android:theme
@@ -139,15 +141,15 @@ ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidMani
 	android:name
 		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:19:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:23:13-27:29
+ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:24:13-28:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:24:17-69
+ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:25:17-69
 	android:name
-		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:24:25-66
+		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:25:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:26:17-77
+ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:27:17-77
 	android:name
-		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:26:27-74
+		ADDED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:27:27-74
 uses-sdk
 INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml

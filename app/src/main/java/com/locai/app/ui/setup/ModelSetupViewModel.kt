@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.locai.app.LocAiContainer
 import com.locai.app.data.llm.DownloadProgress
 import com.locai.app.data.llm.ModelOption
+import com.locai.app.domain.UserPersona
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +13,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+enum class OnboardingStep { WELCOME, MODEL }
+
 data class ModelSetupUiState(
+    val step: OnboardingStep = OnboardingStep.WELCOME,
+    val userName: String = "",
+    val selectedPersona: UserPersona = UserPersona.DEFAULT,
     val availableModels: List<ModelOption> = ModelOption.entries,
     val selectedModel: ModelOption = ModelOption.DEFAULT,
     val isDownloading: Boolean = false,
@@ -29,16 +35,47 @@ class ModelSetupViewModel(private val container: LocAiContainer) : ViewModel() {
 
     init {
         viewModelScope.launch {
+            val onboarded = container.preferences.isOnboarded.first()
             val selected = ModelOption.byId(container.preferences.selectedModelId.first())
             val alreadyDownloaded = container.preferences.isModelDownloaded.first() &&
                 container.modelFile(selected).exists()
-            _uiState.update { it.copy(selectedModel = selected, isReady = alreadyDownloaded) }
+            val step = if (onboarded) OnboardingStep.MODEL else OnboardingStep.WELCOME
+
+            _uiState.update { it.copy(step = step, selectedModel = selected, isReady = alreadyDownloaded) }
+
+            // Ollama-style "just works": once we know which model to fetch (immediately for a
+            // returning user, right after personalization for a new one) the pull starts on its
+            // own — no button tap required.
+            if (step == OnboardingStep.MODEL && !alreadyDownloaded) startDownload()
+        }
+    }
+
+    fun onNameChanged(name: String) {
+        _uiState.update { it.copy(userName = name) }
+    }
+
+    fun onPersonaSelected(persona: UserPersona) {
+        _uiState.update { it.copy(selectedPersona = persona, selectedModel = persona.recommendedModel) }
+    }
+
+    fun continueFromWelcome() {
+        if (_uiState.value.step != OnboardingStep.WELCOME) return
+        val state = _uiState.value
+        val name = state.userName.trim()
+
+        viewModelScope.launch {
+            if (name.isNotEmpty()) container.preferences.setUserName(name)
+            container.preferences.setUserPersonaId(state.selectedPersona.id)
+            container.preferences.setOnboarded(true)
+            _uiState.update { it.copy(step = OnboardingStep.MODEL, userName = name) }
+            startDownload()
         }
     }
 
     fun onModelSelected(option: ModelOption) {
         if (_uiState.value.isDownloading || _uiState.value.isReady) return
         _uiState.update { it.copy(selectedModel = option, errorMessage = null) }
+        startDownload()
     }
 
     fun startDownload() {

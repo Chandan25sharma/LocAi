@@ -10,6 +10,7 @@ import com.locai.app.data.llm.PromptBuilder
 import com.locai.app.data.prefs.AppPreferences
 import com.locai.app.data.retrieval.HistoryRetriever
 import com.locai.app.domain.Category
+import com.locai.app.domain.UserPersona
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -79,7 +80,9 @@ class ChatRepository(
             category = category,
             recentMessages = recentMessages,
             retrievedContext = retrieved,
-            newUserMessage = userText
+            newUserMessage = userText,
+            userName = preferences.userName.first(),
+            userPersona = UserPersona.byId(preferences.userPersonaId.first())
         )
 
         val topK = preferences.topK.first()

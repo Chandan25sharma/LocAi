@@ -24,6 +24,9 @@ class AppPreferences(private val context: Context) {
         val TEMPERATURE = floatPreferencesKey("temperature")
         val MAX_TOKENS = intPreferencesKey("max_tokens")
         val TOP_K = intPreferencesKey("top_k")
+        val USER_NAME = stringPreferencesKey("user_name")
+        val USER_PERSONA_ID = stringPreferencesKey("user_persona_id")
+        val ONBOARDED = booleanPreferencesKey("onboarded")
     }
 
     val isModelDownloaded: Flow<Boolean> = context.dataStore.data.map {
@@ -47,6 +50,14 @@ class AppPreferences(private val context: Context) {
         it[Keys.TOP_K] ?: DEFAULT_TOP_K
     }
 
+    /** What the user asked to be called during onboarding — used to personalize replies. */
+    val userName: Flow<String?> = context.dataStore.data.map { it[Keys.USER_NAME] }
+
+    /** The id of the [com.locai.app.domain.UserPersona] picked during onboarding, if any. */
+    val userPersonaId: Flow<String?> = context.dataStore.data.map { it[Keys.USER_PERSONA_ID] }
+
+    val isOnboarded: Flow<Boolean> = context.dataStore.data.map { it[Keys.ONBOARDED] ?: false }
+
     suspend fun setModelDownloaded(downloaded: Boolean) {
         context.dataStore.edit { it[Keys.MODEL_DOWNLOADED] = downloaded }
     }
@@ -65,6 +76,18 @@ class AppPreferences(private val context: Context) {
 
     suspend fun setTopK(value: Int) {
         context.dataStore.edit { it[Keys.TOP_K] = value }
+    }
+
+    suspend fun setUserName(name: String) {
+        context.dataStore.edit { it[Keys.USER_NAME] = name }
+    }
+
+    suspend fun setUserPersonaId(id: String) {
+        context.dataStore.edit { it[Keys.USER_PERSONA_ID] = id }
+    }
+
+    suspend fun setOnboarded(onboarded: Boolean) {
+        context.dataStore.edit { it[Keys.ONBOARDED] = onboarded }
     }
 
     companion object {

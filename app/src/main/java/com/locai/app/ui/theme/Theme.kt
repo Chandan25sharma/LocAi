@@ -9,24 +9,39 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Teal80,
-    secondary = TealGrey80,
-    tertiary = Amber80
+    primary = Indigo80,
+    onPrimary = Color(0xFF2D1F8F),
+    primaryContainer = Color(0xFF3F35A8),
+    onPrimaryContainer = Color(0xFFE3DFFF),
+    secondary = IndigoGrey80,
+    tertiary = Coral80,
+    background = IndigoBackgroundDark,
+    surface = Color(0xFF1D1A2C)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Teal40,
-    secondary = TealGrey40,
-    tertiary = Amber40
+    primary = Indigo40,
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFFE4DFFF),
+    onPrimaryContainer = Color(0xFF1A1148),
+    secondary = IndigoGrey40,
+    tertiary = Coral40,
+    background = IndigoBackgroundLight,
+    surface = Color.White
 )
 
+/**
+ * LocAi defaults dynamic color OFF: the indigo/violet identity is the brand, not a
+ * suggestion — wallpaper-derived Material You palettes would wash that out on most devices.
+ */
 @Composable
 fun LocAiTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
