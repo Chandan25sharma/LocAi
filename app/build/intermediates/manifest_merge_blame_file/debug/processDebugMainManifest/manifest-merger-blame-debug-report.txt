@@ -1,0 +1,190 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.locai.app"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+7-->INJECTED
+8        android:minSdkVersion="26"
+8-->INJECTED
+9        android:targetSdkVersion="36" />
+9-->INJECTED
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:5:5-67
+11-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:6:5-79
+12-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:6:22-76
+13
+14    <permission
+14-->[androidx.core:core:1.13.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a385607fd4308374a6bd41571372c87\workspace\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+15        android:name="com.locai.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+15-->[androidx.core:core:1.13.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a385607fd4308374a6bd41571372c87\workspace\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+16        android:protectionLevel="signature" />
+16-->[androidx.core:core:1.13.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a385607fd4308374a6bd41571372c87\workspace\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+17
+18    <uses-permission android:name="com.locai.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+18-->[androidx.core:core:1.13.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a385607fd4308374a6bd41571372c87\workspace\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+18-->[androidx.core:core:1.13.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a385607fd4308374a6bd41571372c87\workspace\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+19
+20    <application
+20-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:8:5-29:19
+21        android:name="com.locai.app.LocAiApplication"
+21-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:9:9-41
+22        android:allowBackup="true"
+22-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:10:9-35
+23        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+23-->[androidx.core:core:1.13.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a385607fd4308374a6bd41571372c87\workspace\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+24        android:dataExtractionRules="@xml/data_extraction_rules"
+24-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:11:9-65
+25        android:debuggable="true"
+26        android:extractNativeLibs="false"
+26-->INJECTED
+27        android:fullBackupContent="@xml/backup_rules"
+27-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:12:9-54
+28        android:icon="@mipmap/ic_launcher"
+28-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:13:9-43
+29        android:label="@string/app_name"
+29-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:14:9-41
+30        android:roundIcon="@mipmap/ic_launcher_round"
+30-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:15:9-54
+31        android:supportsRtl="true"
+31-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:16:9-35
+32        android:theme="@style/Theme.LocAi" >
+32-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:17:9-43
+33        <activity
+33-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:18:9-28:20
+34            android:name="com.locai.app.MainActivity"
+34-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:19:13-41
+35            android:exported="true"
+35-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:20:13-36
+36            android:label="@string/app_name"
+36-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:21:13-45
+37            android:theme="@style/Theme.LocAi" >
+37-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:22:13-47
+38            <intent-filter>
+38-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:23:13-27:29
+39                <action android:name="android.intent.action.MAIN" />
+39-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:24:17-69
+39-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:24:25-66
+40
+41                <category android:name="android.intent.category.LAUNCHER" />
+41-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:26:17-77
+41-->C:\Users\chandan\AndroidStudioProjects\LocAi\app\src\main\AndroidManifest.xml:26:27-74
+42            </intent-filter>
+43        </activity>
+44
+45        <service
+45-->[androidx.room:room-runtime-android:2.7.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\f8d91a46c8c5035686731672b1113f97\workspace\transformed\room-runtime-release\AndroidManifest.xml:24:9-28:63
+46            android:name="androidx.room.MultiInstanceInvalidationService"
+46-->[androidx.room:room-runtime-android:2.7.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\f8d91a46c8c5035686731672b1113f97\workspace\transformed\room-runtime-release\AndroidManifest.xml:25:13-74
+47            android:directBootAware="true"
+47-->[androidx.room:room-runtime-android:2.7.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\f8d91a46c8c5035686731672b1113f97\workspace\transformed\room-runtime-release\AndroidManifest.xml:26:13-43
+48            android:exported="false" />
+48-->[androidx.room:room-runtime-android:2.7.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\f8d91a46c8c5035686731672b1113f97\workspace\transformed\room-runtime-release\AndroidManifest.xml:27:13-37
+49
+50        <activity
+50-->[androidx.compose.ui:ui-tooling-android:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a06008ad01b725967fb36e2dc6f7adb\workspace\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+51            android:name="androidx.compose.ui.tooling.PreviewActivity"
+51-->[androidx.compose.ui:ui-tooling-android:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a06008ad01b725967fb36e2dc6f7adb\workspace\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+52            android:exported="true" />
+52-->[androidx.compose.ui:ui-tooling-android:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\0a06008ad01b725967fb36e2dc6f7adb\workspace\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+53        <activity
+53-->[androidx.compose.ui:ui-test-manifest:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\4dd368858e4762d7f939150c8560fb1b\workspace\transformed\ui-test-manifest-1.7.2\AndroidManifest.xml:23:9-25:39
+54            android:name="androidx.activity.ComponentActivity"
+54-->[androidx.compose.ui:ui-test-manifest:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\4dd368858e4762d7f939150c8560fb1b\workspace\transformed\ui-test-manifest-1.7.2\AndroidManifest.xml:24:13-63
+55            android:exported="true" />
+55-->[androidx.compose.ui:ui-test-manifest:1.7.2] C:\Users\chandan\.gradle\caches\9.3.1\transforms\4dd368858e4762d7f939150c8560fb1b\workspace\transformed\ui-test-manifest-1.7.2\AndroidManifest.xml:25:13-36
+56
+57        <provider
+57-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+58            android:name="androidx.startup.InitializationProvider"
+58-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+59            android:authorities="com.locai.app.androidx-startup"
+59-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+60            android:exported="false" >
+60-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+61            <meta-data
+61-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+62                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+62-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+63                android:value="androidx.startup" />
+63-->[androidx.emoji2:emoji2:1.3.0] C:\Users\chandan\.gradle\caches\9.3.1\transforms\053c054c2f8e6c5ab7a99ea5f29ddadc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+64            <meta-data
+64-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\chandan\.gradle\caches\9.3.1\transforms\e1ea7e7e9898c60079e7422aad670c85\workspace\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+65                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+65-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\chandan\.gradle\caches\9.3.1\transforms\e1ea7e7e9898c60079e7422aad670c85\workspace\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+66                android:value="androidx.startup" />
+66-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\chandan\.gradle\caches\9.3.1\transforms\e1ea7e7e9898c60079e7422aad670c85\workspace\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+67            <meta-data
+67-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+68                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+68-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+69                android:value="androidx.startup" />
+69-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+70        </provider>
+71        <!--
+72             Applications that target Android S+ require explicit declaration of
+73             any referenced vendor-provided libraries.
+74        -->
+75        <uses-native-library
+75-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:15:9-17:40
+76            android:name="libOpenCL.so"
+76-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:16:13-40
+77            android:required="false" />
+77-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:17:13-37
+78        <uses-native-library
+78-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:15:9-17:40
+79            android:name="libOpenCL-car.so"
+79-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:16:13-40
+80            android:required="false" />
+80-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:17:13-37
+81        <uses-native-library
+81-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:15:9-17:40
+82            android:name="libOpenCL-pixel.so"
+82-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:16:13-40
+83            android:required="false" />
+83-->[com.google.mediapipe:tasks-genai:0.10.27] C:\Users\chandan\.gradle\caches\9.3.1\transforms\174423b0b385ce8425ed42ab521a3843\workspace\transformed\tasks-genai-0.10.27\AndroidManifest.xml:17:13-37
+84
+85        <receiver
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+86            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+86-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+87            android:directBootAware="false"
+87-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+88            android:enabled="true"
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+89            android:exported="true"
+89-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+90            android:permission="android.permission.DUMP" >
+90-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+91            <intent-filter>
+91-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+92                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+93            </intent-filter>
+94            <intent-filter>
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+95                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+95-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+96            </intent-filter>
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+98                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+98-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+99            </intent-filter>
+100            <intent-filter>
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+101                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\chandan\.gradle\caches\9.3.1\transforms\8235b717fdb88bfb7c5f3af3cca9797d\workspace\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+102            </intent-filter>
+103        </receiver>
+104    </application>
+105
+106</manifest>
