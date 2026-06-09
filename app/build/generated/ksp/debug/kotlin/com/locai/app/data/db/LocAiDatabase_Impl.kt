@@ -36,15 +36,15 @@ public class LocAiDatabase_Impl : LocAiDatabase() {
   }
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(1,
-        "116b7c2ffc25353fa8d5dc888028f8ba", "105d1bc3e6b1d1af5d838e9035e767b1") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(2,
+        "978287abebcf267bd1f488027d04b5fe", "e80ed7abb4c4109efeef81db27dcb3e6") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `conversations` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `categoryId` TEXT NOT NULL, `title` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `conversationId` INTEGER NOT NULL, `categoryId` TEXT NOT NULL, `role` TEXT NOT NULL, `content` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`conversationId`) REFERENCES `conversations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `conversationId` INTEGER NOT NULL, `categoryId` TEXT NOT NULL, `role` TEXT NOT NULL, `content` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `imagePath` TEXT, FOREIGN KEY(`conversationId`) REFERENCES `conversations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_messages_conversationId` ON `messages` (`conversationId`)")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_messages_categoryId` ON `messages` (`categoryId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '116b7c2ffc25353fa8d5dc888028f8ba')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '978287abebcf267bd1f488027d04b5fe')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -106,6 +106,8 @@ public class LocAiDatabase_Impl : LocAiDatabase() {
         _columnsMessages.put("content", TableInfo.Column("content", "TEXT", true, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
         _columnsMessages.put("timestamp", TableInfo.Column("timestamp", "INTEGER", true, 0, null,
+            TableInfo.CREATED_FROM_ENTITY))
+        _columnsMessages.put("imagePath", TableInfo.Column("imagePath", "TEXT", false, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysMessages: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         _foreignKeysMessages.add(TableInfo.ForeignKey("conversations", "CASCADE", "NO ACTION",

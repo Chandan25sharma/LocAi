@@ -26,7 +26,7 @@ class HistoryRetriever(private val messageDao: MessageDao) {
         excludeConversationId: Long,
         query: String,
         maxResults: Int = DEFAULT_MAX_RESULTS,
-        minScore: Double = DEFAULT_MIN_SCORE
+        minSimilarity: Double = DEFAULT_MIN_SIMILARITY
     ): List<RetrievedExchange> {
         val queryTokens = tokenize(query)
         if (queryTokens.isEmpty()) return emptyList()
@@ -43,14 +43,29 @@ class HistoryRetriever(private val messageDao: MessageDao) {
         val oldest = exchanges.minOf { it.timestamp }.toDouble()
         val span = (newest - oldest).coerceAtLeast(1.0)
 
+        // Topical relevance gates inclusion; recency only re-ranks among matches that already
+        // share real vocabulary with the new question. Recency must never be able to surface an
+        // unrelated past exchange on its own — that's what previously made a brand-new topic
+        // drag a completely different earlier conversation into the prompt as "context", and the
+        // model would keep steering replies back toward that old topic.
+        //
+        // A bare similarity ratio isn't enough either: short questions tokenize down to just one
+        // or two meaningful words after stopword removal, so sharing a SINGLE incidental word
+        // ("today", "phone", ...) with a past question can already push Jaccard past the floor —
+        // surfacing a completely unrelated old exchange as if it were "relevant context". Require
+        // a minimum number of actually-shared meaningful words too, so a real topical overlap is
+        // needed, not just a coincidence of small token sets.
         return exchanges
-            .map { exchange ->
-                val similarity = jaccard(queryTokens, tokenize(exchange.question))
+            .mapNotNull { exchange ->
+                val pastTokens = tokenize(exchange.question)
+                val shared = queryTokens.intersect(pastTokens)
+                if (shared.size < MIN_SHARED_TOKENS) return@mapNotNull null
+                val similarity = shared.size.toDouble() / queryTokens.union(pastTokens).size
+                if (similarity < minSimilarity) return@mapNotNull null
                 val recency = (exchange.timestamp - oldest) / span
                 val score = similarity * SIMILARITY_WEIGHT + recency * RECENCY_WEIGHT
                 exchange to score
             }
-            .filter { (_, score) -> score >= minScore }
             .sortedByDescending { (_, score) -> score }
             .take(maxResults)
             .map { (exchange, score) ->
@@ -87,16 +102,10 @@ class HistoryRetriever(private val messageDao: MessageDao) {
             .filter { it.length > 2 && it !in STOPWORDS }
             .toSet()
 
-    private fun jaccard(a: Set<String>, b: Set<String>): Double {
-        if (a.isEmpty() || b.isEmpty()) return 0.0
-        val intersection = a.intersect(b).size.toDouble()
-        val union = a.union(b).size.toDouble()
-        return if (union == 0.0) 0.0 else intersection / union
-    }
-
     companion object {
         private const val DEFAULT_MAX_RESULTS = 3
-        private const val DEFAULT_MIN_SCORE = 0.12
+        private const val DEFAULT_MIN_SIMILARITY = 0.2
+        private const val MIN_SHARED_TOKENS = 2
         private const val MAX_SCANNED_MESSAGES = 200
         private const val SIMILARITY_WEIGHT = 0.85
         private const val RECENCY_WEIGHT = 0.15

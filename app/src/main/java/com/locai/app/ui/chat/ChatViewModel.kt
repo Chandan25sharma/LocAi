@@ -1,5 +1,6 @@
 package com.locai.app.ui.chat
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.locai.app.LocAiContainer
@@ -16,6 +17,10 @@ data class ChatUiState(
     val category: Category,
     val messages: List<MessageEntity> = emptyList(),
     val inputText: String = "",
+    /** A photo the user picked but hasn't sent yet — shown as a preview above the input row. */
+    val attachedImage: Bitmap? = null,
+    /** Whether the optional vision model is downloaded, i.e. whether to offer "attach a photo" at all. */
+    val isVisionAvailable: Boolean = false,
     /** Non-null while the assistant is actively producing a reply (not yet persisted). */
     val streamingReply: String? = null,
     val isModelLoading: Boolean = true,
@@ -40,6 +45,11 @@ class ChatViewModel(
             }
         }
         viewModelScope.launch {
+            container.preferences.isVisionModelDownloaded.collect { downloaded ->
+                _uiState.update { it.copy(isVisionAvailable = downloaded) }
+            }
+        }
+        viewModelScope.launch {
             val result = container.modelManager.ensureLoaded(container.activeModelFile())
             _uiState.update {
                 it.copy(
@@ -54,18 +64,50 @@ class ChatViewModel(
         _uiState.update { it.copy(inputText = text) }
     }
 
+    /**
+     * The user picked a photo to ask about. Kick off loading the (multi-GB) vision model right
+     * away in the background so it's likely already warm by the time they actually hit send —
+     * [com.locai.app.data.llm.VisionModelManager.ensureLoaded] is a no-op if it's already loaded.
+     */
+    fun onImageAttached(bitmap: Bitmap) {
+        _uiState.update { it.copy(attachedImage = bitmap) }
+        viewModelScope.launch { container.visionModelManager.ensureLoaded(container.visionModelFile) }
+    }
+
+    fun clearAttachedImage() {
+        _uiState.update { it.copy(attachedImage = null) }
+    }
+
+    /** Tapping a suggestion chip sends it immediately rather than just filling the input box. */
+    fun sendSuggestion(prompt: String) {
+        _uiState.update { it.copy(inputText = prompt) }
+        sendMessage()
+    }
+
     fun sendMessage() {
         val current = _uiState.value
         val text = current.inputText.trim()
         if (text.isEmpty() || current.isGenerating || current.isModelLoading) return
 
+        val image = current.attachedImage
         _uiState.update {
-            it.copy(inputText = "", isGenerating = true, streamingReply = "", errorMessage = null)
+            it.copy(
+                inputText = "",
+                attachedImage = null,
+                isGenerating = true,
+                streamingReply = "",
+                errorMessage = null
+            )
         }
 
         viewModelScope.launch {
             try {
-                container.chatRepository.sendMessage(conversationId, category, text).collect { partial ->
+                if (image != null) {
+                    container.visionModelManager.ensureLoaded(container.visionModelFile).onFailure { e ->
+                        throw IllegalStateException("Couldn't load the vision model: ${e.message}")
+                    }
+                }
+                container.chatRepository.sendMessage(conversationId, category, text, image).collect { partial ->
                     _uiState.update { it.copy(streamingReply = partial) }
                 }
             } catch (t: Throwable) {

@@ -31,7 +31,7 @@ public class MessageDao_Impl(
     this.__db = __db
     this.__insertAdapterOfMessageEntity = object : EntityInsertAdapter<MessageEntity>() {
       protected override fun createQuery(): String =
-          "INSERT OR ABORT INTO `messages` (`id`,`conversationId`,`categoryId`,`role`,`content`,`timestamp`) VALUES (nullif(?, 0),?,?,?,?,?)"
+          "INSERT OR ABORT INTO `messages` (`id`,`conversationId`,`categoryId`,`role`,`content`,`timestamp`,`imagePath`) VALUES (nullif(?, 0),?,?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: MessageEntity) {
         statement.bindLong(1, entity.id)
@@ -41,6 +41,12 @@ public class MessageDao_Impl(
         statement.bindText(4, _tmp)
         statement.bindText(5, entity.content)
         statement.bindLong(6, entity.timestamp)
+        val _tmpImagePath: String? = entity.imagePath
+        if (_tmpImagePath == null) {
+          statement.bindNull(7)
+        } else {
+          statement.bindText(7, _tmpImagePath)
+        }
       }
     }
   }
@@ -64,6 +70,7 @@ public class MessageDao_Impl(
         val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
         val _columnIndexOfContent: Int = getColumnIndexOrThrow(_stmt, "content")
         val _columnIndexOfTimestamp: Int = getColumnIndexOrThrow(_stmt, "timestamp")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<MessageEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: MessageEntity
@@ -81,8 +88,14 @@ public class MessageDao_Impl(
           _tmpContent = _stmt.getText(_columnIndexOfContent)
           val _tmpTimestamp: Long
           _tmpTimestamp = _stmt.getLong(_columnIndexOfTimestamp)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
           _item =
-              MessageEntity(_tmpId,_tmpConversationId,_tmpCategoryId,_tmpRole,_tmpContent,_tmpTimestamp)
+              MessageEntity(_tmpId,_tmpConversationId,_tmpCategoryId,_tmpRole,_tmpContent,_tmpTimestamp,_tmpImagePath)
           _result.add(_item)
         }
         _result
@@ -105,6 +118,7 @@ public class MessageDao_Impl(
         val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
         val _columnIndexOfContent: Int = getColumnIndexOrThrow(_stmt, "content")
         val _columnIndexOfTimestamp: Int = getColumnIndexOrThrow(_stmt, "timestamp")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<MessageEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: MessageEntity
@@ -122,8 +136,14 @@ public class MessageDao_Impl(
           _tmpContent = _stmt.getText(_columnIndexOfContent)
           val _tmpTimestamp: Long
           _tmpTimestamp = _stmt.getLong(_columnIndexOfTimestamp)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
           _item =
-              MessageEntity(_tmpId,_tmpConversationId,_tmpCategoryId,_tmpRole,_tmpContent,_tmpTimestamp)
+              MessageEntity(_tmpId,_tmpConversationId,_tmpCategoryId,_tmpRole,_tmpContent,_tmpTimestamp,_tmpImagePath)
           _result.add(_item)
         }
         _result
@@ -155,6 +175,7 @@ public class MessageDao_Impl(
         val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
         val _columnIndexOfContent: Int = getColumnIndexOrThrow(_stmt, "content")
         val _columnIndexOfTimestamp: Int = getColumnIndexOrThrow(_stmt, "timestamp")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<MessageEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: MessageEntity
@@ -172,8 +193,14 @@ public class MessageDao_Impl(
           _tmpContent = _stmt.getText(_columnIndexOfContent)
           val _tmpTimestamp: Long
           _tmpTimestamp = _stmt.getLong(_columnIndexOfTimestamp)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
           _item =
-              MessageEntity(_tmpId,_tmpConversationId,_tmpCategoryId,_tmpRole,_tmpContent,_tmpTimestamp)
+              MessageEntity(_tmpId,_tmpConversationId,_tmpCategoryId,_tmpRole,_tmpContent,_tmpTimestamp,_tmpImagePath)
           _result.add(_item)
         }
         _result

@@ -18,7 +18,9 @@ data class Category(
     val displayName: String,
     val shortDescription: String,
     val icon: ImageVector,
-    val personaPrompt: String
+    val personaPrompt: String,
+    /** Starter questions shown as tappable chips on a brand-new chat, so the user isn't staring at a blank box. */
+    val suggestedPrompts: List<String> = emptyList()
 )
 
 object Categories {
@@ -30,7 +32,13 @@ object Categories {
         icon = Icons.Default.Forum,
         personaPrompt = "You are LocAi, a helpful, concise assistant running entirely on the " +
             "user's device with no internet connection. Answer clearly and directly, and say " +
-            "when you're not sure about something."
+            "when you're not sure about something.",
+        suggestedPrompts = listOf(
+            "Help me write a polite email asking for a deadline extension",
+            "Explain how compound interest works, with an example",
+            "Give me a 3-day beginner workout plan I can do at home",
+            "Help me plan a weekend trip on a tight budget"
+        )
     )
 
     val MEDICAL = Category(
@@ -43,7 +51,13 @@ object Categories {
             "You are NOT a doctor and cannot diagnose or prescribe: always make clear that " +
             "this is general information, not a substitute for professional medical advice, " +
             "and encourage the user to see a licensed clinician for diagnosis, treatment, or " +
-            "anything urgent (and to call local emergency services for emergencies)."
+            "anything urgent (and to call local emergency services for emergencies).",
+        suggestedPrompts = listOf(
+            "What's the difference between a cold and the flu?",
+            "Explain what blood pressure numbers actually mean",
+            "What are good habits for better sleep?",
+            "What should I know about managing stress day to day?"
+        )
     )
 
     val FINANCE = Category(
@@ -55,7 +69,13 @@ object Categories {
             "saving, debt, investing basics, and other money concepts in simple, practical " +
             "terms. You are NOT a licensed financial advisor: make clear this is general " +
             "education, not personalized investment, tax, or legal advice, and suggest the " +
-            "user consult a qualified professional before making major financial decisions."
+            "user consult a qualified professional before making major financial decisions.",
+        suggestedPrompts = listOf(
+            "Help me build a simple monthly budget",
+            "Explain index funds like I'm a complete beginner",
+            "What's a good way to start an emergency fund?",
+            "Walk me through the basics of how credit scores work"
+        )
     )
 
     val LEGAL = Category(
@@ -67,7 +87,13 @@ object Categories {
             "and how processes generally work, in plain language. You are NOT a lawyer and " +
             "laws vary by jurisdiction: make clear this is general information, not legal " +
             "advice for the user's specific situation, and recommend consulting a licensed " +
-            "attorney in their area for anything that matters."
+            "attorney in their area for anything that matters.",
+        suggestedPrompts = listOf(
+            "Explain what a non-disclosure agreement actually covers",
+            "What's the difference between a will and a living trust?",
+            "What should I check before signing a rental lease?",
+            "Explain how small claims court generally works"
+        )
     )
 
     val TECH = Category(
@@ -77,7 +103,13 @@ object Categories {
         icon = Icons.Default.Code,
         personaPrompt = "You are LocAi's technical assistant. Help with programming, " +
             "debugging, software architecture, and technology questions. Be precise, give " +
-            "working code examples when useful, and explain trade-offs concisely."
+            "working code examples when useful, and explain trade-offs concisely.",
+        suggestedPrompts = listOf(
+            "Explain the difference between REST and GraphQL",
+            "Help me debug why my function keeps returning null",
+            "What's a clean way to structure a small Android app?",
+            "Explain how Git rebase differs from merge, with an example"
+        )
     )
 
     val ALL: List<Category> = listOf(GENERAL, MEDICAL, FINANCE, LEGAL, TECH)

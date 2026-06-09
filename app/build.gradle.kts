@@ -21,11 +21,27 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
+        }
+    }
+
+    // Only package arm64-v8a (covers ~95% of Android devices made after 2016).
+    // This alone cuts the APK roughly in half since MediaPipe ships .so files for
+    // arm64-v8a, armeabi-v7a, and x86_64 — we only need the one that matters.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a")
+            isUniversalApk = false
         }
     }
     compileOptions {
@@ -48,6 +64,7 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -65,6 +82,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.okhttp)
     implementation(libs.mediapipe.tasks.genai)
+    // tasks-vision is bundled inside tasks-vision-image-generator; listing both causes duplicate
+    // class/native-lib errors. The image-generator AAR provides everything tasks-vision exports.
+    implementation(libs.mediapipe.tasks.vision.image.generator)
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)

@@ -39,6 +39,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -69,19 +70,27 @@ fun ModelSetupScreen(
         factory = LambdaViewModelFactory { ModelSetupViewModel(container) }
     )
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(uiState.isReady) {
         if (uiState.isReady) onModelReady()
     }
+    // Auto-start download when reaching the MODEL step (handles both new users and returning users
+    // whose download hadn't finished — the foreground service keeps it alive across minimisation).
+    LaunchedEffect(uiState.step) {
+        if (uiState.step == OnboardingStep.MODEL && !uiState.isReady && !uiState.isDownloading && uiState.errorMessage == null) {
+            viewModel.startDownload(context)
+        }
+    }
 
     when (uiState.step) {
-        OnboardingStep.WELCOME -> WelcomeStep(uiState = uiState, viewModel = viewModel)
-        OnboardingStep.MODEL -> ModelStep(uiState = uiState, viewModel = viewModel)
+        OnboardingStep.WELCOME -> WelcomeStep(uiState = uiState, viewModel = viewModel, context = context)
+        OnboardingStep.MODEL -> ModelStep(uiState = uiState, viewModel = viewModel, context = context)
     }
 }
 
 @Composable
-private fun WelcomeStep(uiState: ModelSetupUiState, viewModel: ModelSetupViewModel) {
+private fun WelcomeStep(uiState: ModelSetupUiState, viewModel: ModelSetupViewModel, context: android.content.Context) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -134,7 +143,7 @@ private fun WelcomeStep(uiState: ModelSetupUiState, viewModel: ModelSetupViewMod
             }
 
             Button(
-                onClick = viewModel::continueFromWelcome,
+                onClick = { viewModel.continueFromWelcome(context) },
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(vertical = 14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -234,7 +243,7 @@ private fun PersonaCard(persona: UserPersona, selected: Boolean, onSelect: () ->
 }
 
 @Composable
-private fun ModelStep(uiState: ModelSetupUiState, viewModel: ModelSetupViewModel) {
+private fun ModelStep(uiState: ModelSetupUiState, viewModel: ModelSetupViewModel, context: android.content.Context) {
     if (uiState.isReady) {
         GettingReadyStep(uiState = uiState)
         return
@@ -270,12 +279,12 @@ private fun ModelStep(uiState: ModelSetupUiState, viewModel: ModelSetupViewModel
                 option = option,
                 selected = uiState.selectedModel == option,
                 enabled = !uiState.isDownloading && !uiState.isReady,
-                onSelect = { viewModel.onModelSelected(option) }
+                onSelect = { viewModel.onModelSelected(context, option) }
             )
         }
 
         if (uiState.errorMessage != null) {
-            Button(onClick = viewModel::startDownload, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { viewModel.startDownload(context) }, modifier = Modifier.fillMaxWidth()) {
                 Text("Retry download")
             }
         }

@@ -20,6 +20,7 @@ class AppPreferences(private val context: Context) {
 
     private object Keys {
         val MODEL_DOWNLOADED = booleanPreferencesKey("model_downloaded")
+        val VISION_MODEL_DOWNLOADED = booleanPreferencesKey("vision_model_downloaded")
         val SELECTED_MODEL_ID = stringPreferencesKey("selected_model_id")
         val TEMPERATURE = floatPreferencesKey("temperature")
         val MAX_TOKENS = intPreferencesKey("max_tokens")
@@ -31,6 +32,11 @@ class AppPreferences(private val context: Context) {
 
     val isModelDownloaded: Flow<Boolean> = context.dataStore.data.map {
         it[Keys.MODEL_DOWNLOADED] ?: false
+    }
+
+    /** Whether the optional [com.locai.app.data.llm.VisionModelOption] has been downloaded. */
+    val isVisionModelDownloaded: Flow<Boolean> = context.dataStore.data.map {
+        it[Keys.VISION_MODEL_DOWNLOADED] ?: false
     }
 
     /** The id of the [com.locai.app.data.llm.ModelOption] the user picked in Setup, if any. */
@@ -60,6 +66,10 @@ class AppPreferences(private val context: Context) {
 
     suspend fun setModelDownloaded(downloaded: Boolean) {
         context.dataStore.edit { it[Keys.MODEL_DOWNLOADED] = downloaded }
+    }
+
+    suspend fun setVisionModelDownloaded(downloaded: Boolean) {
+        context.dataStore.edit { it[Keys.VISION_MODEL_DOWNLOADED] = downloaded }
     }
 
     suspend fun setSelectedModelId(id: String) {

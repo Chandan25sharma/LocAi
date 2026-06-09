@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -31,9 +32,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.locai.app.LocAiContainer
+import com.locai.app.data.llm.GeneratorModelOption
+import com.locai.app.data.llm.VisionModelOption
 import com.locai.app.ui.LambdaViewModelFactory
 import kotlin.math.roundToInt
 
@@ -46,9 +50,12 @@ fun SettingsScreen(
 ) {
     val viewModel: SettingsViewModel = viewModel(factory = LambdaViewModelFactory { SettingsViewModel(container) })
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     var confirmClearHistory by remember { mutableStateOf(false) }
     var confirmDeleteModel by remember { mutableStateOf(false) }
+    var confirmDeleteVisionModel by remember { mutableStateOf(false) }
+    var confirmDeleteGeneratorModel by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.modelDeleted) {
         if (uiState.modelDeleted) onModelReset()
@@ -91,6 +98,91 @@ fun SettingsScreen(
                 )
                 OutlinedButton(onClick = { confirmDeleteModel = true }, modifier = Modifier.fillMaxWidth()) {
                     Text("Delete model & set up again")
+                }
+            }
+
+            SectionCard(title = "Image understanding (optional)") {
+                val approxMb = VisionModelOption.APPROX_SIZE_BYTES / (1024 * 1024)
+                Text(
+                    text = when {
+                        uiState.visionModelOnDisk ->
+                            "Downloaded · ${uiState.visionModelSizeMb} MB cached on this device"
+                        uiState.isVisionDownloading -> {
+                            val downloadedMb = uiState.visionDownloadedBytes / (1024 * 1024)
+                            if (uiState.visionTotalBytes > 0) {
+                                val totalMb = uiState.visionTotalBytes / (1024 * 1024)
+                                "Downloading… $downloadedMb / $totalMb MB"
+                            } else {
+                                "Downloading… $downloadedMb MB"
+                            }
+                        }
+                        else -> "Not downloaded — about $approxMb MB"
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "Optional extra download that lets you attach a photo in chat and ask " +
+                        "questions about it — useful on a reasonably capable phone. Everything " +
+                        "still runs fully on this device.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                uiState.visionErrorMessage?.let { message ->
+                    Text(text = message, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                }
+                when {
+                    uiState.visionModelOnDisk -> OutlinedButton(
+                        onClick = { confirmDeleteVisionModel = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("Delete image understanding model") }
+
+                    uiState.isVisionDownloading -> {
+                        val fraction = if (uiState.visionTotalBytes > 0) {
+                            uiState.visionDownloadedBytes.toFloat() / uiState.visionTotalBytes
+                        } else null
+                        if (fraction != null) {
+                            LinearProgressIndicator(progress = { fraction }, modifier = Modifier.fillMaxWidth())
+                        } else {
+                            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                        }
+                    }
+
+                    else -> Button(onClick = { viewModel.downloadVisionModel(context) }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Download image understanding")
+                    }
+                }
+            }
+
+            SectionCard(title = "Image generation (optional)") {
+                Text(
+                    text = if (uiState.generatorModelInstalled) "Model found — ready to generate images"
+                           else "Model not found in expected location",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = GeneratorModelOption.DEVICE_REQUIREMENTS,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Text(
+                    text = "Generates images from text prompts entirely on this device — no internet " +
+                        "or cloud required. Requires a converted Stable Diffusion v1.5 model " +
+                        "(${GeneratorModelOption.APPROX_SIZE}). To install: run Google's MediaPipe " +
+                        "SD conversion script, then copy the output directory to: " +
+                        "Android/data/com.locai.app/files/models/${GeneratorModelOption.DIR_NAME}/",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                if (uiState.generatorModelInstalled) {
+                    OutlinedButton(
+                        onClick = { confirmDeleteGeneratorModel = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("Delete image generation model") }
+                } else {
+                    Button(
+                        onClick = viewModel::refreshGeneratorModelInfo,
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("Check for model") }
                 }
             }
 
@@ -144,6 +236,36 @@ fun SettingsScreen(
                 }) { Text("Delete") }
             },
             dismissButton = { TextButton(onClick = { confirmDeleteModel = false }) { Text("Cancel") } }
+        )
+    }
+
+    if (confirmDeleteVisionModel) {
+        AlertDialog(
+            onDismissRequest = { confirmDeleteVisionModel = false },
+            title = { Text("Delete the image understanding model?") },
+            text = { Text("You'll need to download it again to attach photos in chat.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDeleteVisionModel = false
+                    viewModel.deleteVisionModel()
+                }) { Text("Delete") }
+            },
+            dismissButton = { TextButton(onClick = { confirmDeleteVisionModel = false }) { Text("Cancel") } }
+        )
+    }
+
+    if (confirmDeleteGeneratorModel) {
+        AlertDialog(
+            onDismissRequest = { confirmDeleteGeneratorModel = false },
+            title = { Text("Delete image generation model?") },
+            text = { Text("The model directory will be removed. You will need to reinstall it manually to generate images again.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDeleteGeneratorModel = false
+                    viewModel.deleteGeneratorModel()
+                }) { Text("Delete") }
+            },
+            dismissButton = { TextButton(onClick = { confirmDeleteGeneratorModel = false }) { Text("Cancel") } }
         )
     }
 

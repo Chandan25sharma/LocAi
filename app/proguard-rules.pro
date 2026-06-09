@@ -1,3 +1,18 @@
+# MediaPipe — keep all public API classes so native JNI can still find them at runtime.
+-keep class com.google.mediapipe.** { *; }
+-dontwarn com.google.mediapipe.**
+
+# Room — keep entity/DAO classes that are referenced by generated code.
+-keep class com.locai.app.data.db.** { *; }
+
+# OkHttp / Okio
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+# Kotlin coroutines
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
 # Add project specific ProGuard rules here.
 # You can control the set of applied configuration files using the
 # proguardFiles setting in build.gradle.

@@ -35,7 +35,9 @@ data class MessageEntity(
     val categoryId: String,
     val role: MessageRole,
     val content: String,
-    val timestamp: Long
+    val timestamp: Long,
+    /** Path to a copied-in app-internal image file, when the user attached a photo to this message. */
+    val imagePath: String? = null
 )
 
 enum class MessageRole {

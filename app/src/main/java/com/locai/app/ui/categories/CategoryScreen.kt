@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.History
@@ -71,7 +72,8 @@ fun CategoryScreen(
     container: LocAiContainer,
     onOpenChat: (conversationId: Long, categoryId: String) -> Unit,
     onOpenHistory: () -> Unit,
-    onOpenSettings: () -> Unit
+    onOpenSettings: () -> Unit,
+    onCreateImage: () -> Unit
 ) {
     val viewModel: CategoryViewModel = viewModel(factory = LambdaViewModelFactory { CategoryViewModel(container) })
 
@@ -134,6 +136,9 @@ fun CategoryScreen(
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 FeatureBadgeRow(modifier = Modifier.padding(top = 4.dp))
+            }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                CreateImageBanner(onClick = onCreateImage, modifier = Modifier.padding(top = 4.dp))
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 PrivacyBanner(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
@@ -297,6 +302,55 @@ private fun FeatureBadge(icon: ImageVector, label: String, caption: String, modi
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = 2.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun CreateImageBanner(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.secondaryContainer
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.secondary),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AutoAwesome,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Create an image",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+                Text(
+                    text = "Generate images from text — fully on-device",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
+                    modifier = Modifier.padding(top = 2.dp)
+                )
+            }
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.locai.app.data.repository
 
+import android.graphics.Bitmap
 import com.locai.app.data.db.ConversationDao
 import com.locai.app.data.db.ConversationEntity
 import com.locai.app.data.db.MessageDao
@@ -7,13 +8,18 @@ import com.locai.app.data.db.MessageEntity
 import com.locai.app.data.db.MessageRole
 import com.locai.app.data.llm.LlmModelManager
 import com.locai.app.data.llm.PromptBuilder
+import com.locai.app.data.llm.VisionModelManager
 import com.locai.app.data.prefs.AppPreferences
 import com.locai.app.data.retrieval.HistoryRetriever
 import com.locai.app.domain.Category
 import com.locai.app.domain.UserPersona
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.util.UUID
 
 /**
  * The single place that wires local storage, the on-device "memory" (history retrieval), and
@@ -23,8 +29,10 @@ class ChatRepository(
     private val conversationDao: ConversationDao,
     private val messageDao: MessageDao,
     private val modelManager: LlmModelManager,
+    private val visionModelManager: VisionModelManager,
     private val historyRetriever: HistoryRetriever,
-    private val preferences: AppPreferences
+    private val preferences: AppPreferences,
+    private val imagesDir: File
 ) {
     fun observeConversations(categoryId: String): Flow<List<ConversationEntity>> =
         conversationDao.observeByCategory(categoryId)
@@ -53,19 +61,31 @@ class ChatRepository(
     }
 
     /**
-     * Persists [userText], retrieves relevant past exchanges from this category's history,
-     * builds the full prompt, and streams the model's reply (each emission is the reply
-     * accumulated so far). The final reply is persisted once generation completes.
+     * Persists [userText] (optionally with [attachedImage]), retrieves relevant past exchanges
+     * from this category's history, builds the full prompt, and streams the model's reply (each
+     * emission is the reply accumulated so far). The final reply is persisted once generation
+     * completes.
+     *
+     * When an image is attached, generation is routed through [visionModelManager] instead of
+     * the regular text [modelManager] — the caller is responsible for only offering the attach
+     * option once that optional model has actually been downloaded.
      */
-    fun sendMessage(conversationId: Long, category: Category, userText: String): Flow<String> = flow {
+    fun sendMessage(
+        conversationId: Long,
+        category: Category,
+        userText: String,
+        attachedImage: Bitmap? = null
+    ): Flow<String> = flow {
         val sentAt = System.currentTimeMillis()
+        val imagePath = attachedImage?.let { saveImage(it) }
         messageDao.insert(
             MessageEntity(
                 conversationId = conversationId,
                 categoryId = category.id,
                 role = MessageRole.USER,
                 content = userText,
-                timestamp = sentAt
+                timestamp = sentAt,
+                imagePath = imagePath
             )
         )
         touchConversation(conversationId, titleSeed = userText, timestamp = sentAt)
@@ -89,11 +109,17 @@ class ChatRepository(
         val temperature = preferences.temperature.first()
 
         var fullReply = ""
-        modelManager.generateResponseStream(prompt, topK = topK, topP = DEFAULT_TOP_P, temperature = temperature)
-            .collect { partial ->
-                fullReply = partial
-                emit(partial)
-            }
+        val replyStream = if (attachedImage != null) {
+            visionModelManager.generateResponseStream(
+                prompt, attachedImage, topK = topK, topP = DEFAULT_TOP_P, temperature = temperature
+            )
+        } else {
+            modelManager.generateResponseStream(prompt, topK = topK, topP = DEFAULT_TOP_P, temperature = temperature)
+        }
+        replyStream.collect { partial ->
+            fullReply = partial
+            emit(partial)
+        }
 
         val repliedAt = System.currentTimeMillis()
         messageDao.insert(
@@ -106,6 +132,14 @@ class ChatRepository(
             )
         )
         touchConversation(conversationId, titleSeed = null, timestamp = repliedAt)
+    }
+
+    /** Copies an attached photo into app-internal storage (no permissions needed) and returns its path. */
+    private suspend fun saveImage(bitmap: Bitmap): String = withContext(Dispatchers.IO) {
+        imagesDir.mkdirs()
+        val file = File(imagesDir, "${UUID.randomUUID()}.jpg")
+        file.outputStream().use { out -> bitmap.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, out) }
+        file.absolutePath
     }
 
     private suspend fun touchConversation(conversationId: Long, titleSeed: String?, timestamp: Long) {
@@ -127,5 +161,6 @@ class ChatRepository(
         const val NEW_CHAT_TITLE = "New chat"
         private const val MAX_TITLE_CHARS = 48
         private const val DEFAULT_TOP_P = 0.95f
+        private const val IMAGE_QUALITY = 90
     }
 }

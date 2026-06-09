@@ -76,8 +76,14 @@ class LlmModelManager(
                 session.addQueryChunk(prompt)
                 session.generateResponseAsync { partialResult, done ->
                     accumulated.append(partialResult)
-                    trySend(accumulated.toString())
+                    val text = normalizeEscapedWhitespace(accumulated.toString())
+                    trySend(text)
                     if (done) {
+                        // If the model produced nothing but whitespace (safety filter fired),
+                        // emit a plain fallback rather than showing a blank bubble.
+                        if (text.isBlank()) {
+                            trySend("I don't have specific information on that topic in my current knowledge. Could you rephrase your question or ask something related?")
+                        }
                         close()
                     }
                 }
@@ -96,8 +102,25 @@ class LlmModelManager(
         }
     }
 
+    /**
+     * The model sometimes emits literal backslash-escape sequences (`\n`, `\t`, `\r\n`) as plain
+     * text rather than real line breaks — Compose's [androidx.compose.material3.Text] then shows
+     * them verbatim as "\n" instead of wrapping the line. Turning them back into real whitespace
+     * here, on the accumulated stream, makes every reply render the way the model intended.
+     */
+    private fun normalizeEscapedWhitespace(text: String): String =
+        text.replace("\\r\\n", "\n")
+            .replace("\\n", "\n")
+            .replace("\\t", "\t")
+
     companion object {
-        /** Generous context window: persona + retrieved history + recent turns + new question + reply. */
-        private const val MAX_CONTEXT_TOKENS = 2048
+        // This budgets the WHOLE session — persona + general guidance + retrieved history +
+        // recent turns + the new question AND the model's reply all draw from the same pool.
+        // At 2048 a longer-running chat (lots of recent turns, retrieved snippets, a meaty
+        // question like "help me with this assignment...") could fill the entire budget on
+        // input alone, leaving the model no tokens left to generate — which produced the
+        // empty / blank-newline replies. Gemma 3 1B comfortably supports far larger contexts,
+        // so size this generously enough that there's always real room left to answer.
+        private const val MAX_CONTEXT_TOKENS = 4096
     }
 }
