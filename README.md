@@ -109,6 +109,7 @@ That means you can use your AI assistant:
 Internet access may still be useful for optional features such as downloading models, updates, or other explicitly online functionality.
 
 ---
+screen_welcome3.png
 
 ## 🧩 Local Models
 
