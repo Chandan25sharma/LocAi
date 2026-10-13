@@ -29,4 +29,8 @@ interface MessageDao {
 
     @Query("DELETE FROM messages WHERE conversationId = :conversationId")
     suspend fun deleteForConversation(conversationId: Long)
+
+    /** Drops [fromTimestamp] and everything after it — used to regenerate the last exchange. */
+    @Query("DELETE FROM messages WHERE conversationId = :conversationId AND timestamp >= :fromTimestamp")
+    suspend fun deleteFrom(conversationId: Long, fromTimestamp: Long)
 }

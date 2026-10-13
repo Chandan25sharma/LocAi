@@ -91,7 +91,12 @@ class LlmModelManager(
                 close(t)
             }
 
-            awaitClose { session.close() }
+            // Cancel first: closing a session while native generation is still running (user hit Stop)
+            // can crash. Cancel is a no-op once generation has finished.
+            awaitClose {
+                runCatching { session.cancelGenerateResponseAsync() }
+                session.close()
+            }
         }.flowOn(ioDispatcher)
 
     suspend fun unload() = withContext(ioDispatcher) {

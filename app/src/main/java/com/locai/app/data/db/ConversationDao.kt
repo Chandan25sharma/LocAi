@@ -28,14 +28,15 @@ interface ConversationDao {
     @Query("SELECT * FROM conversations WHERE categoryId = :categoryId ORDER BY updatedAt DESC")
     fun observeByCategory(categoryId: String): Flow<List<ConversationEntity>>
 
-    @Query("SELECT * FROM conversations ORDER BY updatedAt DESC")
+    @Query("SELECT * FROM conversations ORDER BY isPinned DESC, updatedAt DESC")
     fun observeAll(): Flow<List<ConversationEntity>>
 
+    /** Matches chat titles and message text. */
     @Query(
         "SELECT DISTINCT c.* FROM conversations c " +
-            "JOIN messages m ON m.conversationId = c.id " +
-            "WHERE m.content LIKE '%' || :query || '%' " +
-            "ORDER BY c.updatedAt DESC"
+            "LEFT JOIN messages m ON m.conversationId = c.id " +
+            "WHERE c.title LIKE '%' || :query || '%' OR m.content LIKE '%' || :query || '%' " +
+            "ORDER BY c.isPinned DESC, c.updatedAt DESC"
     )
     fun search(query: String): Flow<List<ConversationEntity>>
 }

@@ -1,0 +1,31 @@
+LocAi
+Copyright 2026 Chandan Sharma
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+-------------------------------------------------------------------------------
+Third-party software
+-------------------------------------------------------------------------------
+
+This app depends on, but does not bundle the source of, the following libraries:
+
+  - MediaPipe Tasks (GenAI, Vision) — Copyright Google LLC — Apache License 2.0
+  - AndroidX / Jetpack Compose, Room, DataStore, Navigation
+      — Copyright The Android Open Source Project — Apache License 2.0
+  - Kotlin, kotlinx.coroutines — Copyright JetBrains s.r.o. — Apache License 2.0
+  - OkHttp — Copyright Square, Inc. — Apache License 2.0
+
+-------------------------------------------------------------------------------
+AI models
+-------------------------------------------------------------------------------
+
+AI model weights are NOT included in this repository or the app package. They
+are downloaded by the user at runtime from their original publishers and remain
+under their own licenses:
+
+  - Qwen2.5-0.5B-Instruct and Qwen2.5-1.5B-Instruct (Alibaba Cloud, Qwen team),
+    converted by litert-community — Apache License 2.0
+  - Gemma 4 E2B (Google), converted by litert-community — see the model card
+  - Stable Diffusion v1.5 (optional, user-installed) — CreativeML Open RAIL-M
+
+Users are responsible for complying with each model's license and use policy.

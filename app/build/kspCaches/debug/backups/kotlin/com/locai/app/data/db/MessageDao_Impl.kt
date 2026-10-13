@@ -224,6 +224,22 @@ public class MessageDao_Impl(
     }
   }
 
+  public override suspend fun deleteFrom(conversationId: Long, fromTimestamp: Long) {
+    val _sql: String = "DELETE FROM messages WHERE conversationId = ? AND timestamp >= ?"
+    return performSuspending(__db, false, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, conversationId)
+        _argIndex = 2
+        _stmt.bindLong(_argIndex, fromTimestamp)
+        _stmt.step()
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public companion object {
     public fun getRequiredConverters(): List<KClass<*>> = emptyList()
   }

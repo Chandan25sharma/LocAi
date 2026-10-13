@@ -1,5 +1,6 @@
 package com.locai.app.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -12,7 +13,9 @@ data class ConversationEntity(
     val categoryId: String,
     val title: String,
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    @ColumnInfo(defaultValue = "0")
+    val isPinned: Boolean = false
 )
 
 @Entity(

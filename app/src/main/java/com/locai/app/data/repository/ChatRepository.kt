@@ -14,6 +14,7 @@ import com.locai.app.data.retrieval.HistoryRetriever
 import com.locai.app.domain.Category
 import com.locai.app.domain.UserPersona
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -58,6 +59,17 @@ class ChatRepository(
 
     suspend fun deleteConversation(conversation: ConversationEntity) {
         conversationDao.delete(conversation)
+    }
+
+    // Both re-read the row so a stale drawer copy can't overwrite a newer title/updatedAt.
+    suspend fun renameConversation(id: Long, title: String) {
+        val conversation = conversationDao.getById(id) ?: return
+        conversationDao.update(conversation.copy(title = title.trim().ifEmpty { conversation.title }))
+    }
+
+    suspend fun setPinned(id: Long, pinned: Boolean) {
+        val conversation = conversationDao.getById(id) ?: return
+        conversationDao.update(conversation.copy(isPinned = pinned))
     }
 
     /**
@@ -116,22 +128,40 @@ class ChatRepository(
         } else {
             modelManager.generateResponseStream(prompt, topK = topK, topP = DEFAULT_TOP_P, temperature = temperature)
         }
-        replyStream.collect { partial ->
-            fullReply = partial
-            emit(partial)
+        try {
+            replyStream.collect { partial ->
+                fullReply = partial
+                emit(partial)
+            }
+        } finally {
+            // Runs on Stop (cancellation) too, so whatever was generated so far is kept.
+            withContext(NonCancellable) {
+                if (fullReply.isNotBlank()) {
+                    val repliedAt = System.currentTimeMillis()
+                    messageDao.insert(
+                        MessageEntity(
+                            conversationId = conversationId,
+                            categoryId = category.id,
+                            role = MessageRole.ASSISTANT,
+                            content = fullReply,
+                            timestamp = repliedAt
+                        )
+                    )
+                    touchConversation(conversationId, titleSeed = null, timestamp = repliedAt)
+                }
+            }
         }
+    }
 
-        val repliedAt = System.currentTimeMillis()
-        messageDao.insert(
-            MessageEntity(
-                conversationId = conversationId,
-                categoryId = category.id,
-                role = MessageRole.ASSISTANT,
-                content = fullReply,
-                timestamp = repliedAt
-            )
-        )
-        touchConversation(conversationId, titleSeed = null, timestamp = repliedAt)
+    /**
+     * Removes the last user message and any reply after it, returning that message so the
+     * caller can send it again (regenerate / retry after a failure). Null if there is none.
+     */
+    suspend fun popLastExchange(conversationId: Long): MessageEntity? {
+        val lastUser = messageDao.getForConversation(conversationId)
+            .lastOrNull { it.role == MessageRole.USER } ?: return null
+        messageDao.deleteFrom(conversationId, lastUser.timestamp)
+        return lastUser
     }
 
     /** Copies an attached photo into app-internal storage (no permissions needed) and returns its path. */

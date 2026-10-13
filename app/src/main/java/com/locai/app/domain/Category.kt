@@ -6,7 +6,13 @@ import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.LocalHospital
 import androidx.compose.material.icons.filled.Savings
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.locai.app.ui.theme.AccentAmber
+import com.locai.app.ui.theme.AccentBlue
+import com.locai.app.ui.theme.AccentDeepIndigo
+import com.locai.app.ui.theme.AccentGreen
+import com.locai.app.ui.theme.AccentViolet
 
 /**
  * A topic the user can chat about. Each one carries its own persona/system prompt so the
@@ -18,6 +24,8 @@ data class Category(
     val displayName: String,
     val shortDescription: String,
     val icon: ImageVector,
+    /** Badge colour for this topic (chips, drawer icons). */
+    val accent: Color,
     val personaPrompt: String,
     /** Starter questions shown as tappable chips on a brand-new chat, so the user isn't staring at a blank box. */
     val suggestedPrompts: List<String> = emptyList()
@@ -30,6 +38,7 @@ object Categories {
         displayName = "General",
         shortDescription = "Everyday questions, ideas, writing, and more",
         icon = Icons.Default.Forum,
+        accent = AccentViolet,
         personaPrompt = "You are LocAi, a helpful, concise assistant running entirely on the " +
             "user's device with no internet connection. Answer clearly and directly, and say " +
             "when you're not sure about something.",
@@ -43,9 +52,10 @@ object Categories {
 
     val MEDICAL = Category(
         id = "medical",
-        displayName = "Medical & Health",
+        displayName = "Health",
         shortDescription = "General health, wellness, and medical information",
         icon = Icons.Default.LocalHospital,
+        accent = AccentGreen,
         personaPrompt = "You are LocAi's health information assistant. Explain medical and " +
             "wellness topics in clear, plain language for a general audience. " +
             "You are NOT a doctor and cannot diagnose or prescribe: always make clear that " +
@@ -62,9 +72,10 @@ object Categories {
 
     val FINANCE = Category(
         id = "finance",
-        displayName = "Finance & Money",
+        displayName = "Finance",
         shortDescription = "Budgeting, saving, investing basics, and money concepts",
         icon = Icons.Default.Savings,
+        accent = AccentAmber,
         personaPrompt = "You are LocAi's personal finance assistant. Explain budgeting, " +
             "saving, debt, investing basics, and other money concepts in simple, practical " +
             "terms. You are NOT a licensed financial advisor: make clear this is general " +
@@ -83,6 +94,7 @@ object Categories {
         displayName = "Legal",
         shortDescription = "General legal concepts and how processes typically work",
         icon = Icons.Default.Gavel,
+        accent = AccentBlue,
         personaPrompt = "You are LocAi's legal information assistant. Explain legal concepts " +
             "and how processes generally work, in plain language. You are NOT a lawyer and " +
             "laws vary by jurisdiction: make clear this is general information, not legal " +
@@ -98,9 +110,10 @@ object Categories {
 
     val TECH = Category(
         id = "tech",
-        displayName = "Tech & Programming",
+        displayName = "Tech",
         shortDescription = "Coding help, debugging, and technology explanations",
         icon = Icons.Default.Code,
+        accent = AccentDeepIndigo,
         personaPrompt = "You are LocAi's technical assistant. Help with programming, " +
             "debugging, software architecture, and technology questions. Be precise, give " +
             "working code examples when useful, and explain trade-offs concisely.",
