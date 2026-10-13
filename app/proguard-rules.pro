@@ -2,6 +2,10 @@
 -keep class com.google.mediapipe.** { *; }
 -dontwarn com.google.mediapipe.**
 
+# MediaPipe task options are protobuf-lite messages read via reflection — R8 must not strip them.
+-keep class com.google.protobuf.** { *; }
+-dontwarn com.google.protobuf.**
+
 # Room — keep entity/DAO classes that are referenced by generated code.
 -keep class com.locai.app.data.db.** { *; }
 
