@@ -1,15 +1,41 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
+# Gradle / build output
+.gradle/
+.kotlin/
+build/
 /captures
 .externalNativeBuild
 .cxx
+
+# Local machine config (SDK path, signing secrets)
 local.properties
+*.keystore
+*.jks
+keystore.properties
+
+# Built artifacts — publish APKs via GitHub Releases, not the repo
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.navigation/
+
+# Logs, dumps, OS junk
+*.log
+*.hprof
+.DS_Store
+Thumbs.db
+
+# Local AI models (hundreds of MB — downloaded at runtime)
+*.task
+*.tflite
+*.bin
+*.gguf
+
+# Tooling
+.claude/
+.claude-flow
